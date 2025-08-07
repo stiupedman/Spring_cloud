@@ -64,7 +64,6 @@ public class ValidateCodeFilter extends AbstractGatewayFilterFactory<Object>
         };
     }
 
-    @SuppressWarnings("deprecation")
     private String resolveBodyFromRequest(ServerHttpRequest serverHttpRequest)
     {
         // 获取请求体

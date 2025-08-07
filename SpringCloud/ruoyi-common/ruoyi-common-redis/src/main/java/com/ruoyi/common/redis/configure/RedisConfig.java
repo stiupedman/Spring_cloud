@@ -18,7 +18,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @EnableCaching
 @AutoConfigureBefore(RedisAutoConfiguration.class)
-@SuppressWarnings("deprecation")
 public class RedisConfig extends CachingConfigurerSupport
 {
     @Bean

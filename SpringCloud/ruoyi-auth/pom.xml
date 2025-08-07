@@ -45,7 +45,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-		
+
         <!-- RuoYi Common Security-->
         <dependency>
             <groupId>com.ruoyi</groupId>

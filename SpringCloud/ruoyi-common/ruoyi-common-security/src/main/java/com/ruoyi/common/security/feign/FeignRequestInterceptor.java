@@ -1,7 +1,7 @@
 package com.ruoyi.common.security.feign;
 
 import java.util.Map;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.utils.ServletUtils;
