@@ -99,6 +99,20 @@ public class SysUser extends BaseEntity
     /** 角色ID */
     private Long roleId;
 
+
+    /** 角色名称 */
+    private String roleName;
+
+    // getter 和 setter 方法
+
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
     public SysUser()
     {
 

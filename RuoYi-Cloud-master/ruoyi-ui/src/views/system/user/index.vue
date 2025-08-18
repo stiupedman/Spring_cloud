@@ -62,8 +62,8 @@
               <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
               <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
               <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-              <el-table-column label="角色" align="center" key="roleName" prop="role.roleName" v-if="columns[9].visible" :show-overflow-tooltip="true" />
-              <el-table-column label="职级" align="center" key="rankName" prop="rankName" v-if="columns[7].visible" :show-overflow-tooltip="true" />
+              <el-table-column label="角色" align="center" key="roleName" prop="roleName" v-if="columns[9].visible" :show-overflow-tooltip="true" />
+              <el-table-column label="职级" align="center" key="rankName" prop="rank.rankName" v-if="columns[7].visible" :show-overflow-tooltip="true" />
               <el-table-column label="岗位" align="center" key="postName" prop="postName" v-if="columns[8].visible" :show-overflow-tooltip="true" />
               <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
               <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
@@ -155,9 +155,9 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
-                <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId" :disabled="item.status == 1" ></el-option>
-              </el-select>
+            <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
+              <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId" :disabled="item.status == 1" ></el-option>
+            </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -467,20 +467,22 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset()
-      const userId = row.userId || this.ids
+      this.resetForm(); // 确保表单重置正确
+      const userId = row.userId;
+      // 调用正确的接口函数getUser
       getUser(userId).then(response => {
-        this.form = response.data
-        this.postOptions = response.posts
-        this.rankOptions = response.ranks
-        this.roleOptions = response.roles
-        this.$set(this.form, "postIds", response.postIds)
-        this.$set(this.form, "roleIds", response.roleIds)
-        this.$set(this.form, "rankIds", response.rankIds)
-        this.open = true
-        this.title = "修改用户"
-        this.form.password = ""
-      })
+        this.form = response.data;
+        // 初始化选择器选项
+        this.postOptions = response.posts || [];
+        this.roleOptions = response.roles || [];
+        // 回显岗位和角色（使用接口返回的ID数组，或从posts/roles转换）
+        this.$set(this.form, "postIds", response.postIds || (this.form.posts ? this.form.posts.map(p => p.postId) : []));
+        this.$set(this.form, "roleIds", response.roleIds || (this.form.roles ? this.form.roles.map(r => r.roleId) : []));
+        this.open = true;
+        this.title = "修改用户";
+      }).catch(error => {
+        console.error("获取用户详情失败：", error); // 增加错误捕获
+      });
     },
     /** 重置密码按钮操作 */
     handleResetPwd(row) {

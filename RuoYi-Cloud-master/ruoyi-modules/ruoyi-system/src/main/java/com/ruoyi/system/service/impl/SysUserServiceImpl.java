@@ -76,11 +76,10 @@ public class SysUserServiceImpl implements ISysUserService
      */
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUser> selectUserList(SysUser user)
-    {
-        List<SysUser> userList = userMapper.selectUserList(user);
-        return userList;
-
+    public List<SysUser> selectUserList(SysUser user) {
+        // 原逻辑：return userMapper.selectUserList(user);
+        // 改为查询包含岗位和角色信息的列表
+        return userMapper.selectUserListWithPostRole(user);
     }
 
     /**

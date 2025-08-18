@@ -18,7 +18,12 @@ public interface SysUserMapper
      * @return 用户信息集合信息
      */
     public List<SysUser> selectUserList(SysUser sysUser);
-
+    /**
+     * 查询用户列表（包含岗位和角色名称）
+     * @param user 用户查询条件
+     * @return 用户列表（含岗位、角色信息）
+     */
+    List<SysUser> selectUserListWithPostRole(SysUser user);
     /**
      * 根据条件分页查询已配用户角色列表
      * 
