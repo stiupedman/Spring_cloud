@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysRankMapper">
+
+    <resultMap type="SysRank" id="SysRankResult">
+        <result property="rankId"    column="rank_id"    />
+        <result property="rankCode"    column="rank_code"    />
+        <result property="rankName"    column="rank_name"    />
+        <result property="rankSort"    column="rank_sort"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysRankVo">
+        select rank_id, rank_code, rank_name, rank_sort, status, create_by, create_time, update_by, update_time, remark from sys_rank
+    </sql>
+
+    <select id="selectSysRankList" parameterType="SysRank" resultMap="SysRankResult">
+        <include refid="selectSysRankVo"/>
+        <where>
+            <if test="rankCode != null  and rankCode != ''"> and rank_code = #{rankCode}</if>
+            <if test="rankName != null  and rankName != ''"> and rank_name like concat('%', #{rankName}, '%')</if>
+            <if test="rankSort != null "> and rank_sort = #{rankSort}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectSysRankByRankId" parameterType="Long" resultMap="SysRankResult">
+        <include refid="selectSysRankVo"/>
+        where rank_id = #{rankId}
+    </select>
+
+    <insert id="insertSysRank" parameterType="SysRank" useGeneratedKeys="true" keyProperty="rankId">
+        insert into sys_rank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rankCode != null and rankCode != ''">rank_code,</if>
+            <if test="rankName != null and rankName != ''">rank_name,</if>
+            <if test="rankSort != null">rank_sort,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rankCode != null and rankCode != ''">#{rankCode},</if>
+            <if test="rankName != null and rankName != ''">#{rankName},</if>
+            <if test="rankSort != null">#{rankSort},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysRank" parameterType="SysRank">
+        update sys_rank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rankCode != null and rankCode != ''">rank_code = #{rankCode},</if>
+            <if test="rankName != null and rankName != ''">rank_name = #{rankName},</if>
+            <if test="rankSort != null">rank_sort = #{rankSort},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where rank_id = #{rankId}
+    </update>
+
+    <delete id="deleteSysRankByRankId" parameterType="Long">
+        delete from sys_rank where rank_id = #{rankId}
+    </delete>
+
+    <delete id="deleteSysRankByRankIds" parameterType="String">
+        delete from sys_rank where rank_id in
+        <foreach item="rankId" collection="array" open="(" separator="," close=")">
+            #{rankId}
+        </foreach>
+    </delete>
+</mapper>
