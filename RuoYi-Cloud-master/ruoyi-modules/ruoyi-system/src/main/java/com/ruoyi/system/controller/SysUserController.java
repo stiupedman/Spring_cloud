@@ -211,7 +211,6 @@ public class SysUserController extends BaseController
         Integer initPasswordModify = Convert.toInt(configService.selectConfigByKey("sys.account.initPasswordModify"));
         return initPasswordModify != null && initPasswordModify == 1 && pwdUpdateDate == null;
     }
-
     // 检查密码是否过期
     public boolean passwordIsExpiration(Date pwdUpdateDate)
     {

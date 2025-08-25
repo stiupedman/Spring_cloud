@@ -34,7 +34,9 @@ public class SysConfigController extends BaseController
 {
     @Autowired
     private ISysConfigService configService;
-
+    /**
+     * 参数管理
+     */
     /**
      * 获取参数配置列表
      */

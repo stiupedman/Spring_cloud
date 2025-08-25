@@ -56,9 +56,19 @@ public class SecurityContextHolder
         return Convert.toLong(get(SecurityConstants.DETAILS_USER_ID), 0L);
     }
 
+    public static Long getDeptId()
+    {
+        return Convert.toLong(get(SecurityConstants.DETAILS_DEPT_ID), 0L);
+    }
+
     public static void setUserId(String account)
     {
         set(SecurityConstants.DETAILS_USER_ID, account);
+    }
+
+    public static void setDeptId(String account)
+    {
+        set(SecurityConstants.DETAILS_DEPT_ID, account);
     }
 
     public static String getUserName()

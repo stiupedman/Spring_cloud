@@ -63,7 +63,18 @@
               <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
               <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
               <el-table-column label="角色" align="center" key="roleName" prop="roleName" v-if="columns[9].visible" :show-overflow-tooltip="true" />
-              <el-table-column label="职级" align="center" key="rankName" prop="rank.rankName" v-if="columns[7].visible" :show-overflow-tooltip="true" />
+              <el-table-column
+                label="职级"
+                align="center"
+                prop="rankName"
+                width="120"
+              >
+                <!-- 若职级为空（如管理员），可显示默认文本 -->
+                <template slot-scope="scope">
+                  {{ scope.row.rankName || '-' }}
+                </template>
+              </el-table-column>
+
               <el-table-column label="岗位" align="center" key="postName" prop="postName" v-if="columns[8].visible" :show-overflow-tooltip="true" />
               <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
               <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
@@ -168,9 +179,19 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="职级">
-              <el-select v-model="form.rankIds" multiple placeholder="请选择职级">
-                <el-option v-for="item in rankOptions" :key="item.rankId" :label="item.rankName" :value="item.rankId" :disabled="item.status == 1" ></el-option>
+            <!-- 在用户弹窗的表单中添加 -->
+            <el-form-item label="职级" prop="rankId">
+              <el-select
+                v-model="form.rankId"
+                placeholder="请选择职级"
+                clearable
+              >
+                <el-option
+                  v-for="rank in rankList"
+                  :key="rank.rankId"
+                  :label="rank.rankName"
+                  :value="rank.rankId"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -217,6 +238,7 @@ import Treeselect from "@riophae/vue-treeselect"
 import "@riophae/vue-treeselect/dist/vue-treeselect.css"
 import { Splitpanes, Pane } from "splitpanes"
 import "splitpanes/dist/splitpanes.css"
+import {listRank} from "@/api/system/rank";
 
 export default {
   name: "User",
@@ -261,7 +283,7 @@ export default {
       // 角色选项
       roleOptions: [],
       // 职级选项
-      rankOptions: [],
+      rankList: [], // 职级列表
       // 表单参数
       form: {},
       defaultProps: {
@@ -290,7 +312,8 @@ export default {
         userName: undefined,
         phonenumber: undefined,
         status: undefined,
-        deptId: undefined
+        deptId: undefined,
+        rankId: undefined // 职级ID筛选条件
       },
       // 列信息
       columns: [
@@ -307,6 +330,9 @@ export default {
       ],
       // 表单校验
       rules: {
+        rankId: [
+          { required: true, message: "请选择职级", trigger: "change" }
+        ],
         userName: [
           {required: true, message: "用户名称不能为空", trigger: "blur"},
           {min: 2, max: 20, message: '用户名称长度必须介于 2 和 20 之间', trigger: 'blur'}
@@ -345,6 +371,7 @@ export default {
   created() {
     this.getList()
     this.getDeptTree()
+    this.getRankList(); // 加载职级数据
     this.getConfigKey("sys.user.initPassword").then(response => {
       this.initPassword = response.msg
     })
@@ -359,6 +386,12 @@ export default {
           this.loading = false
         }
       )
+    },
+    // 获取职级列表（用于筛选下拉框）
+    getRankList() {
+      listRank({}).then(response => {
+        this.rankList = response.rows;
+      });
     },
     /** 查询部门下拉树结构 */
     getDeptTree() {
@@ -568,5 +601,5 @@ export default {
       this.$refs.upload.submit()
     }
   }
-}
+}//想回学校了
 </script>

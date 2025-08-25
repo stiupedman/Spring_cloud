@@ -96,13 +96,22 @@ public class SysUser extends BaseEntity
     /** 岗位组 */
     private Long[] postIds;
 
+    private String postGroup;
+
     /** 角色ID */
     private Long roleId;
 
 
     /** 角色名称 */
     private String roleName;
+    private Long rankId;       // 职级ID
+    private String rankName;   // 职级名称
 
+    // getter和setter
+    public Long getRankId() { return rankId; }
+    public void setRankId(Long rankId) { this.rankId = rankId; }
+    public String getRankName() { return rankName; }
+    public void setRankName(String rankName) { this.rankName = rankName; }
     // getter 和 setter 方法
 
 
@@ -288,6 +297,13 @@ public class SysUser extends BaseEntity
     public void setPwdUpdateDate(Date pwdUpdateDate)
     {
         this.pwdUpdateDate = pwdUpdateDate;
+    }
+
+    public String getPostGroup() {
+        return postGroup;
+    }
+    public void setPostGroup(String postGroup) {
+        this.postGroup = postGroup;
     }
 
     public SysDept getDept()

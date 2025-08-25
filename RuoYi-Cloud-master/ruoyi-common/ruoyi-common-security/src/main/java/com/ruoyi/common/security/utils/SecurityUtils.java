@@ -101,7 +101,13 @@ public class SecurityUtils
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
     }
-
+    /**
+     * 获取职级ID
+     **/
+    public static Long getDeptId()
+    {
+        return SecurityContextHolder.getDeptId();
+    }
     /**
      * 判断密码是否相同
      *

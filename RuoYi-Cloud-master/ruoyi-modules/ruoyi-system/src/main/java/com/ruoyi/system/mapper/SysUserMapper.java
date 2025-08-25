@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.system.api.domain.SysUser;
 
@@ -9,16 +11,10 @@ import com.ruoyi.system.api.domain.SysUser;
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysUserMapper
 {
-    /**
-     * 根据条件分页查询用户列表
-     * 
-     * @param sysUser 用户信息
-     * @return 用户信息集合信息
-     */
-    public List<SysUser> selectUserList(SysUser sysUser);
-    /**
+        /**
      * 查询用户列表（包含岗位和角色名称）
      * @param user 用户查询条件
      * @return 用户列表（含岗位、角色信息）
@@ -71,6 +67,14 @@ public interface SysUserMapper
      * @return 结果
      */
     public int updateUser(SysUser user);
+
+    /**
+     * 通过用户IDs查询用户
+     *
+     * @param userId 用户IDs
+     * @return 用户对象信息
+     */
+    public List<SysUser> selectUserByIds(Long[] userIds);
 
     /**
      * 修改用户头像

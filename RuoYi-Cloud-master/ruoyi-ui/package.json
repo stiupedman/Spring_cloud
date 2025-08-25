@@ -2,7 +2,7 @@
   "name": "liaojiahao",
   "version": "1.0.0",
   "description": "家教服务管理平台",
-  "author": "若依",
+  "author": "ljh",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",

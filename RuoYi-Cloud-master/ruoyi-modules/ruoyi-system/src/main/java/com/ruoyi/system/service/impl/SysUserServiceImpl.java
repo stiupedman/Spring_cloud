@@ -415,7 +415,7 @@ public class SysUserServiceImpl implements ISysUserService
     {
         this.insertUserRole(user.getUserId(), user.getRoleIds());
     }
-
+    //
     /**
      * 新增用户岗位信息
      * 
@@ -438,7 +438,7 @@ public class SysUserServiceImpl implements ISysUserService
             userPostMapper.batchUserPost(list);
         }
     }
-
+    //需要自己自备电脑，想居家办公了
     /**
      * 新增用户角色信息
      * 

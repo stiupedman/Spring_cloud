@@ -120,7 +120,9 @@ public class SysMenuServiceImpl implements ISysMenuService
         }
         return permsSet;
     }
-
+    /**
+     * spring框架
+     */
     /**
      * 根据用户ID查询菜单
      * 

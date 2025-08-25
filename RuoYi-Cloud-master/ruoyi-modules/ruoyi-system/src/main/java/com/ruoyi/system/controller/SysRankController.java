@@ -30,6 +30,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/rank")
+//guihuacuoleyinggaidayideshihoujiukaishijinruanjianshetuandeshizhedayinianjingsaizaidaershangdaodasanxiadedezheduanshijianfengkuangzhaoshixi,daosijiukeyiwanmeiruzhile,kewuadoumeiyouzhemeyigeqinxideguihua,zhexiazhengzale,zaozhidaobuxuejisuanjile
 public class SysRankController extends BaseController
 {
     @Autowired

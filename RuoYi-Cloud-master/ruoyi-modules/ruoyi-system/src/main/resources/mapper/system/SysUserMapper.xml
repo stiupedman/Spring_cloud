@@ -62,32 +62,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="selectUserListWithPostRole" parameterType="SysUser" resultMap="SysUserResult">
 		select
-		u.user_id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber,
-		u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time,
-		u.remark, d.dept_name, d.leader,
-		p.post_name as postName,  -- 岗位名称
-		r.role_name as roleName   -- 角色名称
+		u.user_id, u.dept_id, u.nick_name, u.user_name,
+		u.email, u.avatar, u.phonenumber, u.sex, u.status,
+		-- 新增职级相关字段
+		u.rank_id, rk.rank_name as rankName,
+		d.dept_name, p.post_name as postName, r.role_name as roleName
 		from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
-		-- 关联用户-岗位中间表（使用ANY_VALUE处理非GROUP BY列）
+		-- 关联职级表（关键）
+		left join sys_rank rk on u.rank_id = rk.rank_id
+		-- 关联岗位表（原有）
 		left join (
-		select
-		up.user_id,
-		any_value(p.post_name) as post_name  -- 解决only_full_group_by问题
-		from sys_user_post up
-		left join sys_post p on up.post_id = p.post_id
-		group by up.user_id  -- 按用户ID分组
+		select up.user_id, any_value(p.post_name) as post_name
+		from sys_user_post up left join sys_post p on up.post_id = p.post_id
+		group by up.user_id
 		) p on u.user_id = p.user_id
-		-- 关联用户-角色中间表（使用ANY_VALUE处理非GROUP BY列）
+		-- 关联角色表（原有）
 		left join (
-		select
-		ur.user_id,
-		any_value(r.role_name) as role_name  -- 解决only_full_group_by问题
-		from sys_user_role ur
-		left join sys_role r on ur.role_id = r.role_id
-		group by ur.user_id  -- 按用户ID分组
+		select ur.user_id, any_value(r.role_name) as role_name
+		from sys_user_role ur left join sys_role r on ur.role_id = r.role_id
+		group by ur.user_id
 		) r on u.user_id = r.user_id
 		where u.del_flag = '0'
+		<!-- 以下为原有条件，保持不变 -->
 		<if test="userId != null and userId != 0">
 			AND u.user_id = #{userId}
 		</if>
@@ -100,10 +97,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="phonenumber != null and phonenumber != ''">
 			AND u.phonenumber like concat('%', #{phonenumber}, '%')
 		</if>
-		<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+		<if test="params.beginTime != null and params.beginTime != ''">
 			AND date_format(u.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
 		</if>
-		<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+		<if test="params.endTime != null and params.endTime != ''">
 			AND date_format(u.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
 		</if>
 		<if test="deptId != null and deptId != 0">
@@ -115,7 +112,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<!-- 数据范围过滤 -->
 		${params.dataScope}
 	</select>
-	
+	<select id="selectUserByIds" parameterType="Long" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+		where u.user_id in
+		<foreach collection="array" item="userId" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</select>
 	<select id="selectAllocatedList" parameterType="SysUser" resultMap="SysUserResult">
 	    select distinct u.user_id, u.dept_id, u.user_name, u.nick_name, u.email, u.phonenumber, u.status, u.create_time
 	    from sys_user u
